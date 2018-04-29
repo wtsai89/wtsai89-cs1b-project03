@@ -3,11 +3,18 @@ package cellularData;
 import java.util.Scanner;
 import java.io.*;
 
+/**
+ * Reads a csv file containing cellular data and stores it in a table
+ */
 public class CSVReader {
     private String[] countryNames;
     private int[] yearLabels;
     private double[][] cellularDataTable;
 
+    /**
+     *
+     * @param filename
+     */
     public CSVReader(String filename)
     {
         File file = new File(filename);
