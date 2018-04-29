@@ -1,9 +1,10 @@
 package cellularData;
+
 /**
  *  Tests the CSVReader class, which reads input from a CSV file. Uses
  *  the attributes stored in CSVReader object to fill the CellularData class.
  *
- * @author Foothill College, [YOUR NAME HERE]
+ * @author Foothill College, William Tsai
  */
 public class TestCSVReader
 {
@@ -16,7 +17,8 @@ public class TestCSVReader
 		// NOTE: Make sure to use relative path instead of specifying the entire
 		// path
 		// (such as /Users/alicew/myworkspace/so_on_and_so_forth).
-		final String FILENAME = "resources/cellular_short_oneDecade.csv";	// Directory path for Mac OS X
+		final String FILENAME = "resources\\cellular_short_oneDecade.csv";	// Directory path for Windows
+		final String FILENAME2 = "resources\\cellular.csv";
 
 		// TODO: Make sure to test with the full input file as well
 		// final String FILENAME = "resources/cellular.csv"; // Directory path for Mac OS X
@@ -102,7 +104,37 @@ public class TestCSVReader
 		// Illegal Argument Request of start year: 1960.
 		// Valid period for Brazil is 2005 to 2014.
 		// Total subscriptions = 948.34 
-		
+
+		//////////////////////////////////////////////////////////////////
+		//Didn't initialize cellular.csv so I added it
+		//////////////////////////////////////////////////////////////////
+		parser = new CSVReader(FILENAME2);
+
+		countryNames = parser.getCountryNames();
+		yearLabels = parser.getYearLabels();
+		parsedTable = parser.getParsedTable();
+
+		numRows = parsedTable.length;
+		numColumns = parser.getNumberOfYears();
+		startingYear = yearLabels[0];
+
+		datatable = new CellularData(numRows, numColumns, startingYear);
+
+		// From the array that stores parsed information,
+		// add one country at a time to an object of type CellularData.
+		for (int countryIndex = 0; countryIndex < countryNames.length; countryIndex++)
+		{
+			double [] countryData = parsedTable[countryIndex];
+			datatable.addCountry(countryNames[countryIndex], countryData);
+		}
+
+		// Display the string representation of the data table.
+		/*
+		System.out.println(datatable);
+		 */
+
+		////////////////////////////////////////////////////////////////////
+
 		try 
 		{
 			countryNum = 0;
@@ -130,7 +162,7 @@ public class TestCSVReader
 			totalSubscriptions = datatable.getNumSubscriptionsInCountryForPeriod(countryNames[countryNum], requestedStart,requestedEndYear);
 			System.out.printf("Total subscriptions = %.2f \n\n", totalSubscriptions);
 		} 
-		catch (IllegalArgumentException ex) 
+		catch (IllegalArgumentException ex)
 		{
 			System.out.println(ex.getMessage());
 		}
@@ -147,6 +179,20 @@ public class TestCSVReader
 		//       Use the full cellular.csv for the input file of your additional test cases.
 		//
 		// TODO: Also, test for additional cases where the requested range of years is invalid.
+
+		try
+		{
+			countryNum = 146;
+			requestedStart = 1995;
+			requestedEndYear = 2014;
+			System.out.printf("Requesting subscriptions for \"%s\" between %d - %d. \n", countryNames[countryNum], requestedStart, requestedEndYear);
+			totalSubscriptions = datatable.getNumSubscriptionsInCountryForPeriod(countryNames[countryNum], requestedStart,requestedEndYear);
+			System.out.printf("Total subscriptions = %.2f \n\n", totalSubscriptions);
+		}
+		catch (IllegalArgumentException ex)
+		{
+			System.out.println(ex.getMessage());
+		}
 
 
 		System.out.println("\nDone with TestCSVReader.\n");
